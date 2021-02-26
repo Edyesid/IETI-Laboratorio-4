@@ -1,6 +1,6 @@
 # IETI-Laboratorio-4
 
-## Escuela Colombiana de ingeniería Julio Garavito
+### Escuela Colombiana de ingeniería Julio Garavito
 
 ### Edwin Yesid Rodriguez Maldonado
 
