@@ -58,6 +58,7 @@ export class Login extends React.Component {
                                         variant="contained"
                                         color="primary"
                                         className="submit"
+                                        onClick={this.handleSubmit}
                                     >
                                         Sign in
                                     </Button>

@@ -96,6 +96,7 @@ export default function DrawerLeft() {
   const logout = () => {
     localStorage.removeItem("isLoggedIn")
     localStorage.removeItem("actualPerson")
+    setOpen(false);
   };
 
   return (

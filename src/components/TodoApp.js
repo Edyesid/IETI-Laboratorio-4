@@ -11,25 +11,57 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import moment from "moment";
 import FormDialog from './FormDialog';
+import Filter from './Filter';
+import FilterListIcon from '@material-ui/icons/FilterList';
 export class TodoApp extends Component {
     constructor(props) {
         super(props);
         const listItems =[{description: "some description text", name: "Santiago Carrillo", email: "sancarbar@gmail", status:"ready", dueDate: moment()},
-        {description: "some description text", name: "Edwin Rodriguez", email: "correo@gmail", status:"ready", dueDate: moment()}];
-
-        this.state = {items: listItems, description:"", name:"", email:"", status:"", dueDate: moment(), open:false};
+        {description: "some description text 2", name: "Edwin Rodriguez", email: "correo@gmail", status:"ready", dueDate: moment()},
+        {description: "some description text", name: "Johann Rodriguez", email: "johann@gmail.com", status:"ready", dueDate: moment()},
+        {description: "some description text 2", name: "Esteban Gomez", email: "Esteban@gmail.com", status:"expecting", dueDate: moment()},
+        {description: "some description text 3", name: "Jairo quintero", email: "jairo@gmail.com", status:"ready", dueDate: moment()},
+        {description: "some description text 3", name: "Rosa Lopez", email: "rosa@gmail.com", status:"expecting", dueDate: moment()},
+        {description: "some description text 3", name: "Dagoberto", email: "dagoberto@gmail.com", status:"ready", dueDate: moment()}];
+        this.state = {items: listItems, itemsAux:listItems, description:"", name:"", email:"", status:"", dueDate: moment(), open:false,
+        filterOpen: false, filterDate: null, filterEmail: null, filterState: null};
         this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handleStatusChange = this.handleStatusChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
         this.handleOpenChange = this.handleOpenChange.bind(this);
+        this.handleEmailsForFilter = this.handleEmailsForFilter.bind(this);
+        this.handleDatesForFilter = this.handleDatesForFilter.bind(this);
+        this.handleOpenChangeFilter = this.handleOpenChangeFilter.bind(this);
+        this.handleFilterDateChange = this.handleFilterDateChange.bind(this);
+        this.handleFilterEmailChange = this.handleFilterEmailChange.bind(this);
+        this.handleFilterStateChange = this.handleFilterStateChange.bind(this);
+        this.filter = this.filter.bind(this);
+        this.cancelFiter = this.filter.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     render() {
         return (
             <div className="App">
+                <Fab size="medium" color="primary" aria-label="add" margin="theme.spacing(1)">
+                    <FilterListIcon onClick = {this.handleOpenChangeFilter}/>
+                </Fab>
+                <br/><br/>
                 <TodoList todoList={this.state.items}/>
+                <Filter
+                    open = {this.state.filterOpen}
+                    state = {this.state}
+                    handleEmailsForFilter = {this.handleEmailsForFilter}
+                    handleDatesForFilter = {this.handleDatesForFilter}
+                    handleOpenChangeFilter = {this.handleOpenChangeFilter}
+                    handleFilterDateChange = {this.handleFilterDateChange}
+                    handleFilterEmailChange = {this.handleFilterEmailChange}
+                    handleFilterStateChange = {this.handleFilterStateChange}
+                    cancelFiter = {this.cancelFiter}
+                    filter = {this.filter}
+                />
+
                 <FormDialog
                     open = {this.state.open}
                     state = {this.state}
@@ -41,12 +73,51 @@ export class TodoApp extends Component {
                     handleOpenChange = {this.handleOpenChange}
                     handleSubmit = {this.handleSubmit}
                 />
+                <br/>
                 <Fab size="medium" color="primary" aria-label="add" margin="theme.spacing(1)">
                     <AddIcon onClick = {this.handleOpenChange}/>
                 </Fab>
             </div>
-
         );
+    }
+
+    handleFilterDateChange(e) {
+        this.setState({
+            filterDate: e.target.value
+        });
+    }
+    handleFilterEmailChange(e) {
+        this.setState({
+            filterEmail: e.target.value
+        });
+    }
+    handleFilterStateChange(e) {
+        this.setState({
+            filterState: e.target.value
+        });
+    }
+    
+    filter(e) {
+        var listItemsFilter = []
+        for(var i = 0; i < this.state.items.length; i++) {
+            const item = this.state.items[i];
+            if (item.dueDate.toString() === this.state.filterDate ||
+                item.email === this.state.filterEmail ||
+                item.status === this.state.filterState) {
+                    listItemsFilter.push(item)
+                } 
+        }
+        this.setState({
+            items: listItemsFilter
+        });
+        this.handleOpenChangeFilter(false);
+    }
+
+    cancelFiter(boolean) {
+        this.setState({
+            items: this.state.itemsAux
+        });
+        this.handleOpenChangeFilter(boolean);
     }
 
     handleDescriptionChange(e) {
@@ -85,6 +156,28 @@ export class TodoApp extends Component {
         });
     }
 
+    handleOpenChangeFilter(boolean) {
+        this.setState({
+            filterOpen: boolean
+        });
+    }
+    
+    handleDatesForFilter(e) {
+        let dates = new Set();
+        for (var i = 0; i < this.state.items.length; i++) {
+            const item = this.state.items[i];
+            dates.add(item.dueDate.toString());
+        }
+        return [...dates];
+    }
+
+    handleEmailsForFilter(e) {
+        let emails = new Set();
+        for (var i = 0; i < this.state.items.length; i++) {
+            emails.add(this.state.items[i].email);
+        }
+        return [...emails];
+    }
     handleSubmit(e) {
 
         e.preventDefault();
@@ -101,6 +194,7 @@ export class TodoApp extends Component {
         };
         this.setState(prevState => ({
             items: prevState.items.concat(newItem),
+            itemsAux: prevState.itemsAux.concat(newItem),
             description: '',
             name: '',
             email: '',

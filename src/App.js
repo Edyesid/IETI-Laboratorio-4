@@ -11,20 +11,20 @@ class App extends Component {
     }
     render() {
         const LoginView = () => (
-            <Login />
+            <Login/>
         );
 
-        const DrawerView = () => (
-            <DrawerLeft />
+        const UserProfileView = () => (
+            <UserProfile/>
         );
 
         return (
             <Router>
                 <div className="App">
                     <div>
-                        {!localStorage.getItem('isLoggedIn') && <Route exact path="/" component={LoginView}/>}
-                        {localStorage.getItem('isLoggedIn') && <Route exact path="/home" component={DrawerView}/>}
-                        <Route exact path="/signup" component={UserProfile}/>
+                        <Route exact path="/" component={localStorage.getItem("isLoggedIn") ? DrawerLeft: LoginView}/>
+                        <Route exact path="/home" component={localStorage.getItem("isLoggedIn") ? DrawerLeft: LoginView}/>
+                        <Route exact path="/signup" component={localStorage.getItem("isLoggedIn") ? DrawerLeft: UserProfileView}/>
                     </div>
                 </div>
             </Router>
