@@ -64,7 +64,7 @@ export default function FormDialog(props) {
 
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => props.cancelFiter(false)} color="primary">
+          <Button onClick={props.cancelFilter} color="primary">
             Clear all
           </Button>
           <br/>

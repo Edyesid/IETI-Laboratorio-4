@@ -38,7 +38,7 @@ export class TodoApp extends Component {
         this.handleFilterEmailChange = this.handleFilterEmailChange.bind(this);
         this.handleFilterStateChange = this.handleFilterStateChange.bind(this);
         this.filter = this.filter.bind(this);
-        this.cancelFiter = this.filter.bind(this);
+        this.cancelFilter = this.cancelFilter.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     render() {
@@ -58,8 +58,8 @@ export class TodoApp extends Component {
                     handleFilterDateChange = {this.handleFilterDateChange}
                     handleFilterEmailChange = {this.handleFilterEmailChange}
                     handleFilterStateChange = {this.handleFilterStateChange}
-                    cancelFiter = {this.cancelFiter}
                     filter = {this.filter}
+                    cancelFilter = {this.cancelFilter}
                 />
 
                 <FormDialog
@@ -98,6 +98,7 @@ export class TodoApp extends Component {
     }
     
     filter(e) {
+        console.log(this.state.itemsAux)
         var listItemsFilter = []
         for(var i = 0; i < this.state.items.length; i++) {
             const item = this.state.items[i];
@@ -107,17 +108,26 @@ export class TodoApp extends Component {
                     listItemsFilter.push(item)
                 } 
         }
+        this.handleItems(listItemsFilter);
+        this.handleOpenChangeFilter(false);
+    }
+
+    cancelFilter(e) {
+        console.log("entro");
+        console.log(this.state.itemsAux);
+        this.handleItems(this.state.itemsAux);
         this.setState({
-            items: listItemsFilter
+            filterDate: null,
+            filterEmail: null,
+            filterState: null
         });
         this.handleOpenChangeFilter(false);
     }
 
-    cancelFiter(boolean) {
+    handleItems(lista) {
         this.setState({
-            items: this.state.itemsAux
+            items: lista
         });
-        this.handleOpenChangeFilter(boolean);
     }
 
     handleDescriptionChange(e) {

@@ -17,7 +17,7 @@ export class CardItem extends React.Component {
       {"key": "Description", "value": this.props.description},
       {"key": "Name", "value": this.props.name},
       {"key": "Email", "value": this.props.email},
-      {"key": "Status", "value": this.props.description},
+      {"key": "Status", "value": this.props.status},
       {"key": "Duedate", "value": this.props.dueDate}
     ];
     return (
